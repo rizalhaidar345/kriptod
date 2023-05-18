@@ -1,6 +1,6 @@
 # Program : Stream Cipher
-# Nama    : Rizal Haidar Ghifari
-# NIM     : 2000414
+# Nama    : Rifkhi Akbar
+# NIM     : 2007397
 
 
 import os
