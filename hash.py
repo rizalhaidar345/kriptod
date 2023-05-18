@@ -33,18 +33,18 @@ def kunci(p, q, h):
     y = g**x % p
     return (p, q, g, y, x)
 
-def pembangkitan(kunci):
+def pembangkitan(kunci, string):
     p, q, g, y, x = kunci
     k = random.randint(1, q-1)
     r = pow(g, k, p)%q
-    s = (invmod(k, q)*(hashFunc("hello")+x*r))%q
+    s = (invmod(k, q)*(hashFunc(string)+x*r))%q
     return (r, s)
 
-def verifying(key1, key2):
+def verifying(key1, key2, string):
     p, q, g, y, x = key1
     r, s = key2
     w = invmod(s, q)
-    u1 = hashFunc("hello")*w % q
+    u1 = hashFunc(string)*w % q
     u2 = r*w % q
     v = ((pow(g, u1, p)*pow(y, u2, p))%p)%q
     if v == r:
