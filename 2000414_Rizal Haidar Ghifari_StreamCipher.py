@@ -27,11 +27,12 @@ with open(full_path_input, "r") as file:
 
 # Konversi string ke bit
 def str_to_bin(string, len_bit):
-    string_bit = ""
-    for i in range(len(string)):
-        string_ord = ord(string[i]) - 97
-        string_bit += bin(string_ord)[2:].zfill(len_bit)
-    return string_bit
+    # string_bit = ""
+    res = ''.join(format(i, '08b') for i in bytearray(string, encoding ='utf-8'))
+    # for i in range(len(string)):
+    #     string_ord = ord(string[i]) - 97
+    #     string_bit += bin(string_ord)[2:].zfill(len_bit)
+    return res
 
 # Konversi bit ke string
 def bin_to_str(bit, len_bit):
@@ -68,66 +69,88 @@ def enc_shift(string, key_word):
     return enc_result
 
 # Dekripsi Shift Cipher
-def dec_shift(string, key_word):
-    string_bit = str_to_bin(string,8)
-    print(string_bit)
-    key_word_bit = generate_keystream(key_word,string)
+# def dec_shift(string, key_word):
+#     string_bit = str_to_bin(string,8)
+#     # print(string_bit)
+#     key_word_bit = generate_keystream(key_word,string)
     
-    dec_result_bin = ""
-    for i in range(len(string_bit)):
-        dec_result_bin += str(int(string_bit[i]) ^ int(key_word_bit[i]))
+#     dec_result_bin = ""
+#     for i in range(len(string_bit)):
+#         dec_result_bin += str(int(string_bit[i]) ^ int(key_word_bit[i]))
     
-    dec_result = bin_to_str(dec_result_bin,8)
+#     dec_result = bin_to_str(dec_result_bin,8)
     
-    return dec_result
+#     return dec_result
+
+def encrypt(plaintext, key):
+    ciphertext = ""
+    key_index = 0
+    for char in plaintext:
+        key_char = key[key_index % len(key)]
+        encrypted_char = chr(ord(char) ^ ord(key_char))
+        ciphertext += encrypted_char
+        key_index += 1
+    return ciphertext
+
+def decrypt(ciphertext, key):
+    plaintext = ""
+    key_index = 0
+    for char in ciphertext:
+        key_char = key[key_index % len(key)]
+        decrypted_char = chr(ord(char) ^ ord(key_char))
+        plaintext += decrypted_char
+        key_index += 1
+    return plaintext
+
+print(encrypt("Hello, World", "secretkey"))
 
 # PROGRAM UTAMA
 # Print judul dan kode
-def print_judul():
-    print("STREAM CIPHER")
-    print("[1] Enkripsi Stream Cipher")
-    print("[2] Dekripsi Stream Cipher")
+# def print_judul():
+#     print("STREAM CIPHER")
+#     print("[1] Enkripsi Stream Cipher")
+#     print("[2] Dekripsi Stream Cipher")
 
-# Teks pada input
-pesan = "Masukkan pilihan (1/2): "
-pesan_peringatan = "Pilihan yang anda masukkan salah. Coba lagi!"
+# # Teks pada input
+# pesan = "Masukkan pilihan (1/2): "
+# pesan_peringatan = "Pilihan yang anda masukkan salah. Coba lagi!"
 
-print_judul()
+# print_judul()
 
-pilihan = input(pesan)
+# pilihan = input(pesan)
 
-match pilihan:
-    case "1":
-        # [1] Enkripsi Stream Cipher
-        print("\n###### ENKRIPSI STREAM CIPHER ######")
-        print("Teks dibaca dari:", full_path_input)
-        print("Isi teks:", input_teks)
-        print("Masukkan kunci berupa teks tanpa spasi!")
-        key = input("Kunci = ")
-        enc_result = enc_shift(input_teks, key)
+# match pilihan:
+#     case "1":
+#         # [1] Enkripsi Stream Cipher
+#         print("\n###### ENKRIPSI STREAM CIPHER ######")
+#         print("Teks dibaca dari:", full_path_input)
+#         print("Isi teks:", input_teks)
+#         print("Masukkan kunci berupa teks tanpa spasi!")
+#         key = input("Kunci = ")
+#         enc_result = encrypt_decrypt_stream(key, input_teks)
 
-        print("\nHasil Enkripsi:", enc_result)
+#         print("\nHasil Enkripsi:", enc_result)
             
-        string = "ENKRIPSI:\n" + "# Plainteks:\n" + input_teks + "\n\n" + "# Hasil Enkripsi:\n" + "{} -> {}".format(key, enc_result)
-        with open(full_path_output, "w") as file:
-            file.write(string)
-        print("Hasil enkripsi telah disimpan di:", full_path_output)
-        input()
+#         string = "ENKRIPSI:\n" + "# Plainteks:\n" + input_teks + "\n\n" + "# Hasil Enkripsi:\n" + "{} -> {}".format(key, enc_result)
+#         with open(full_path_output, "w") as file:
+#             file.write(string)
+#         print("Hasil enkripsi telah disimpan di:", full_path_output)
+#         input()
 
-    case "2":
-        # [2] Dekripsi Stream Cipher
-        print("\n###### DEKRIPSI STREAM CIPHER ######")
-        print("Teks dibaca dari:", full_path_input)
-        print("Isi teks:", input_teks)
-        print("Masukkan kunci berupa teks tanpa spasi!")
-        key = input("Kunci = ")
-        dec_result = dec_shift(input_teks, key)
+#     case "2":
+#         # [2] Dekripsi Stream Cipher
+#         print("\n###### DEKRIPSI STREAM CIPHER ######")
+#         print("Teks dibaca dari:", full_path_input)
+#         print("Isi teks:", input_teks)
+#         print("Masukkan kunci berupa teks tanpa spasi!")
+#         key = input("Kunci = ")
+#         dec_result = encrypt_decrypt_stream(input_teks, key)
 
-        print("\nHasil Dekripsi:", dec_result)
+#         print("\nHasil Dekripsi:", dec_result)
             
-        string = "DEKRIPSI:\n" + "# Cipherteks:\n" + input_teks + "\n\n" + "# Hasil Dekripsi:\n" + "{} -> {}".format(key, dec_result)
-        with open(full_path_output, "w") as file:
-            file.write(string)
-        print("Hasil dekripsi telah disimpan di:", full_path_output)
-    case _:
-        print("\n"+pesan_peringatan)
+#         string = "DEKRIPSI:\n" + "# Cipherteks:\n" + input_teks + "\n\n" + "# Hasil Dekripsi:\n" + "{} -> {}".format(key, dec_result)
+#         with open(full_path_output, "w") as file:
+#             file.write(string)
+#         print("Hasil dekripsi telah disimpan di:", full_path_output)
+#     case _:
+#         print("\n"+pesan_peringatan)

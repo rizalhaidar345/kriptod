@@ -1,0 +1,7 @@
+ENKRIPSI:
+# Plainteks:
+rifkhi
+
+
+# Hasil Enkripsi:
+ewe -> o
